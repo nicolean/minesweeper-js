@@ -1,0 +1,120 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#container {
+  /* height: 100%; */
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#level-select {
+  width: 100%;
+  display: flex;
+  height: 5rem;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
+#game-container {
+
+}
+#game-container.beg {
+  width: 16rem;
+  height: 16rem; /* height + 2rem header */
+}
+#game-container.int {
+  width: 32rem;
+  height: 32rem; /* height + 2rem header */
+}
+#game-container.exp {
+  width: 60rem;
+  height: 32rem; /* height + 2rem header */
+}
+
+#game-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  height: 2rem;
+}
+#game-header > div {
+  display: inline-block;
+}
+
+#mine-count {
+  text-align: center;
+}
+#mine-count.beg { width: 5rem; }
+#mine-count.int { width: 11rem; }
+#mine-count.exp { width: 11rem; }
+#smiley {
+  border: 1px black solid;
+  height: 2rem;
+  width: 2rem;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+}
+#timer {
+  text-align: center;
+}
+#timer.beg { width: 5rem; }
+#timer.int { width: 11rem; }
+#timer.exp { width: 11rem; }
+
+#grid {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  flex-wrap: wrap;
+}
+
+.grid-row {
+  display: flex;
+}
+
+.grid-cell {
+  height: 1.5rem;
+  width: 1.5rem;
+  border: .25rem outset rgb(172, 172, 172);
+  display: flex;
+  background-color: rgb(230, 230, 230);
+  user-select: none;
+  justify-content: center;
+  vertical-align: middle;
+  font-weight: bold;
+}
+
+.grid-cell.clicked {
+  background-color: rgb(192, 192, 192);
+}
+
+.grid-cell.num1:after { content: '1'; color: blue; }
+.grid-cell.num2:after { content: '2'; color: green; }
+.grid-cell.num3:after { content: '3'; color: red; }
+.grid-cell.num4:after { content: '4'; color: navy; }
+.grid-cell.num5:after { content: '5'; color: brown; }
+.grid-cell.num6:after { content: '6'; color: cyan; }
+.grid-cell.num7:after { content: '7'; color: black; }
+.grid-cell.num8:after { content: '8'; color: grey; }
+.grid-cell.mine:after { content: '*'; color: black; font-size: 30px;}
+
+.grid-cell.flagged {
+  background-image: url('./flag.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.grid-cell.exploded {
+  background-color: red;
+}
