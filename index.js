@@ -173,7 +173,6 @@ function revealCell(row, col, counter = true) {
     }
   }
   checkGame();
-  console.log(sweptCellCount);
 }
 
 function adjacentFlagCheck(row, col) {
@@ -191,6 +190,7 @@ function adjacentFlagCheck(row, col) {
 function checkGame() {
   if (sweptCellCount == levels[selectedLevel].safeCount) {
     console.log('complete!');
+    $('#smiley').html(':)');
   } else {
     console.log('still working...');
   }
