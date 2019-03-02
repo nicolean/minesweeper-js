@@ -77,17 +77,19 @@ function buildGame() {
     }
   }
   buildGrid(currentLevel, gameGrid);
+  console.log(gameGrid);
   gameMap = gameGrid;
 
 }
 
 function buildGrid(level, grid) {
-  let gridHtml = '<div id="game-container" class="'+selectedLevel+'">'
-    +'<div id="game-header">'
-    +'<div class="'+selectedLevel+'" id="mine-count">'+level.mineCount+'</div>'
-    +'<div id="smiley">:|</div>'
-    +'<div class="'+selectedLevel+'" id="timer">'+time+'</div>'
-    +'</div>';
+  // let gridHtml = '<div id="game-container" class="'+selectedLevel+'">'
+  //   +'<div id="game-header">'
+  //   +'<div class="'+selectedLevel+'" id="mine-count">'+level.mineCount+'</div>'
+  //   +'<div id="smiley">:|</div>'
+  //   +'<div class="'+selectedLevel+'" id="timer">'+time+'</div>'
+  //   +'</div>';
+  let gridHtml = '';
   for (let r = 0; r < grid.length; r++) {
     gridHtml += '<div class="grid-row">';
     for (let c = 0; c < grid[r].length; c++) {
@@ -95,9 +97,9 @@ function buildGrid(level, grid) {
     }
     gridHtml += '</div>';
   }
-  gridHtml += '</div>';
+  // gridHtml += '</div>';
   $('#mine-count').html(level.mineCount);
-  $('#grid').html(gridHtml);
+  $('#grid-container').html(gridHtml);
 }
 
 function scramble(a) {

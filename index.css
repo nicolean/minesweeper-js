@@ -24,18 +24,6 @@ body {
 #game-container {
   border: .5rem solid rgb(151, 151, 151);
 }
-#game-container.beg {
-  width: 16rem;
-  height: 18rem; /* height + 2rem header */
-}
-#game-container.int {
-  width: 32rem;
-  height: 34rem; /* height + 2rem header */
-}
-#game-container.exp {
-  width: 60rem;
-  height: 34rem; /* height + 2rem header */
-}
 
 #game-header {
   display: flex;
@@ -44,6 +32,7 @@ body {
   align-content: center;
   height: 2rem;
 }
+
 #game-header > div {
   display: inline-block;
 }
@@ -51,9 +40,7 @@ body {
 #mine-count {
   text-align: center;
 }
-#mine-count.beg { width: 7rem; }
-#mine-count.int { width: 15rem; }
-#mine-count.exp { width: 29rem; }
+
 #smiley {
   border: 1px black solid;
   height: 2rem;
@@ -65,9 +52,6 @@ body {
 #timer {
   text-align: center;
 }
-#timer.beg { width: 7rem; }
-#timer.int { width: 15rem; }
-#timer.exp { width: 29rem; }
 
 #grid {
   display: flex;
@@ -83,21 +67,24 @@ body {
 }
 
 .grid-cell {
+  box-sizing: border-box;
   height: 1.5rem;
   width: 1.5rem;
   border: .25rem outset rgb(255, 255, 255);
   display: flex;
   background-color: rgb(206, 206, 206);
   user-select: none;
+  align-content: center;
   justify-content: center;
-  vertical-align: middle;
+  /* vertical-align: middle; */
   font-weight: bold;
 }
 
 .grid-cell.clicked {
-  height: 1.9rem;
-  width: 1.9rem;
+  /* height: 1.9rem; */
+  /* width: 2rem; */
   border: .05rem solid rgb(151, 151, 151);
+  /* border: .25rem solid rgb(151, 151, 151); */
 }
 
 .grid-cell.num1:after { content: '1'; color: blue; }
