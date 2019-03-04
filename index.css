@@ -22,35 +22,70 @@ body {
 }
 
 #game-container {
-  border: .5rem solid rgb(151, 151, 151);
+  /* border: .05rem solid rgb(151, 151, 151); */
+}
+
+#game-menu {
+  display: flex;
+  align-content: center;
+  background-color: rgb(206, 206, 206); 
+  padding: 0.3rem;
+}
+.game-menu-item {
+  font-size: 10pt;
+  margin-right: 1rem;
+  cursor: pointer;
+}
+.game-menu-item::first-letter {
+  text-decoration: underline;
 }
 
 #game-header {
   display: flex;
   justify-content: center;
-  align-items: center;
   align-content: center;
   height: 2rem;
+  padding: 0.3rem;
+  background-color: rgb(206, 206, 206); 
 }
 
-#game-header > div {
-  display: inline-block;
+.header-item {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  font-family: 'ZCOOL QingKe HuangYou', cursive;
+  font-size: 18px;
 }
 
+#mine-count-container {
+  justify-content: flex-start;
+}
 #mine-count {
   text-align: center;
+  background-color: black;
+  color: red;
+  padding: 0.3rem;
+  cursor: default;
 }
 
+#smiley-container {
+  justify-content: center;
+}
 #smiley {
   border: 1px black solid;
-  height: 2rem;
-  width: 2rem;
-  text-align: center;
-  vertical-align: middle;
+  padding: 0.3rem;
   cursor: pointer;
 }
+
+#timer-container {
+  justify-content: flex-end;
+}
 #timer {
-  text-align: center;
+  text-align: center; 
+  background-color: black;
+  color: red;
+  padding: 0.3em;
+  cursor: default;
 }
 
 #grid {
@@ -62,29 +97,37 @@ body {
   flex-wrap: wrap;
 }
 
+#grid-container {
+  box-sizing: border-box;
+  /* background-color: rgb(206, 206, 206); */
+  border: 0.5rem solid rgb(184, 184, 184);
+}
+
 .grid-row {
   display: flex;
 }
 
 .grid-cell {
   box-sizing: border-box;
+  display: flex;
   height: 1.5rem;
   width: 1.5rem;
-  border: .25rem outset rgb(255, 255, 255);
-  display: flex;
+  border: .2rem outset rgb(255, 255, 255);
   background-color: rgb(206, 206, 206);
   user-select: none;
-  align-content: center;
+  /* align-content: center; */
+  align-items: center;
   justify-content: center;
-  /* vertical-align: middle; */
   font-weight: bold;
+  font-size: 1.25rem;
 }
 
 .grid-cell.clicked {
-  /* height: 1.9rem; */
-  /* width: 2rem; */
-  border: .05rem solid rgb(151, 151, 151);
-  /* border: .25rem solid rgb(151, 151, 151); */
+  border: 0.01em solid rgb(163, 163, 163);
+}
+
+.grid-cell.exploded {
+  background-color: red;
 }
 
 .grid-cell.num1:after { content: '1'; color: blue; }
@@ -95,15 +138,18 @@ body {
 .grid-cell.num6:after { content: '6'; color: cyan; }
 .grid-cell.num7:after { content: '7'; color: black; }
 .grid-cell.num8:after { content: '8'; color: grey; }
-.grid-cell.mine:after { content: '*'; color: black; font-size: 30px;}
-
-.grid-cell.flagged {
-  background-image: url('./flag.png');
-  background-size: contain;
+/* .grid-cell.mine:after { content: '*'; color: black; } */
+.grid-cell.mine {
+  background-image: url('./img/mine.png'); 
+  background-size: 90% 90%;
   background-repeat: no-repeat;
   background-position: center;
+  color: black;
 }
 
-.grid-cell.exploded {
-  background-color: red;
+.grid-cell.flagged {
+  background-image: url('./img/flag.png');
+  background-size: auto 100%;
+  background-repeat: no-repeat;
+  background-position: center;
 }
