@@ -6,7 +6,7 @@ const levels = { "BEG": beginnerGrid, "INT": intermediateGrid, "EXP": expertGrid
 
 let selectedLevel = 'INT';
 let mineCount = levels[selectedLevel].mineCount;
-let time = 0;
+let time = 000;
 let timeInterval;
 let start = false;
 let sweptCellCount = 0;
@@ -83,12 +83,6 @@ function buildGame() {
 }
 
 function buildGrid(level, grid) {
-  // let gridHtml = '<div id="game-container" class="'+selectedLevel+'">'
-  //   +'<div id="game-header">'
-  //   +'<div class="'+selectedLevel+'" id="mine-count">'+level.mineCount+'</div>'
-  //   +'<div id="smiley">:|</div>'
-  //   +'<div class="'+selectedLevel+'" id="timer">'+time+'</div>'
-  //   +'</div>';
   let gridHtml = '';
   for (let r = 0; r < grid.length; r++) {
     gridHtml += '<div class="grid-row">';
@@ -97,7 +91,6 @@ function buildGrid(level, grid) {
     }
     gridHtml += '</div>';
   }
-  // gridHtml += '</div>';
   $('#mine-count').html(level.mineCount);
   $('#grid-container').html(gridHtml);
 }
@@ -119,6 +112,7 @@ function clickCell(row, col, skipClick = false) {
       buildGame(selectedLevel);
       clickCell(row, col);
     } else {
+      // TODO: if their first click is a flag
       start = true;
       startClock();
     }
@@ -192,7 +186,9 @@ function adjacentFlagCheck(row, col) {
 function checkGame() {
   if (sweptCellCount == levels[selectedLevel].safeCount) {
     console.log('complete!');
+    stopClock(false);
     $('#smiley').html(':)');
+    // FIXME: set remaining flags, reset mine count
   } else {
     console.log('still working...');
   }
@@ -275,6 +271,7 @@ function getSurroundingCells(row, col, obj = false) {
 }
 
 function explode() {
+  // TODO: add check for flagged cells that are not mines
   $('.grid-cell').addClass('clicked');
   $('#smiley').html(':(');
   reveal();
@@ -300,16 +297,18 @@ function startClock() {
   timeInterval = setInterval(function() {
     if (time <= 999 && start == true) {
       time++;
-      $('#timer').html(time);
+      formattedTime = time.toString().padStart(3, '0');
+      $('#timer').html(formattedTime);
     }
   }, 1000);
 }
 
 function stopClock(reset) {
+  console.log('stop clock');
   clearInterval(timeInterval);
   start = false;
   if (reset == true) {
-    time = 0;
+    time = 000;
     $('#timer').html(time);
   }
 }
