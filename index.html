@@ -10,25 +10,27 @@
 </head>
 
 <div id="container">
-
-  <div id="level-select">
-    <button id="beg-button" onclick="selectLevel('beg')">Beginner</button>
-    <button id="int-button" onclick="selectLevel('int')">Intermediate</button>
-    <button id="exp-button" onclick="selectLevel('exp')">Expert</button>
-  </div>
-
   <div id="grid">
     <div id="game-container">
       <div id="game-menu">
-        <div class="game-menu-item">Game</div>
-        <div class="game-menu-item">Help</div>
+        <div class="game-menu-item" id="game-menu-game-button" onclick="toggleMenu('game-menu-game')">Game</div>
+        <div class="game-menu-item" id="game-menu-help-button" onclick="toggleMenu('game-menu-help')">Help</div>
+      </div>
+      <div class="game-menu-context" id="game-menu-game">
+        <div class="game-menu-context-item">New</div>
+        <div class="game-menu-context-item" id="beg-button" onclick="selectLevel('beg')">Beginner</div>
+        <div class="game-menu-context-item" id="int-button" onclick="selectLevel('int')">Intermediate</div>
+        <div class="game-menu-context-item" id="exp-button" onclick="selectLevel('exp')">Expert</div>
+      </div>
+      <div class="game-menu-context" id="game-menu-help">
+        <div class="game-menu-context-item">Help Item 1</div>
       </div>
       <div id="game-header">
         <div class="header-item" id="mine-count-container">
           <div id="mine-count"></div>
         </div>
         <div class="header-item" id="smiley-container">
-          <div id="smiley">:|</div>
+          <div id="smiley" class="smile"></div>
         </div>
         <div class="header-item" id="timer-container">
           <div id="timer">000</div>

@@ -31,10 +31,9 @@ $(document).ready( function() {
   })
 
   $(document).on('click', '#smiley', function() {
-    console.log('clicked smiley');
     stopClock(true);
     buildGame(selectedLevel);
-    $('#smiley').html(':|');
+    $('#smiley').removeClass().addClass('smile');
   })
 });
 
@@ -187,8 +186,9 @@ function checkGame() {
   if (sweptCellCount == levels[selectedLevel].safeCount) {
     console.log('complete!');
     stopClock(false);
-    $('#smiley').html(':)');
-    // FIXME: set remaining flags, reset mine count
+    // FIXME: clock doesn't always stop
+    $('#smiley').removeClass().addClass('win');
+    // TODO: set remaining flags, reset mine count
   } else {
     console.log('still working...');
   }
@@ -272,8 +272,9 @@ function getSurroundingCells(row, col, obj = false) {
 
 function explode() {
   // TODO: add check for flagged cells that are not mines
+  // if flagged and not mine, clicked but with x
   $('.grid-cell').addClass('clicked');
-  $('#smiley').html(':(');
+  $('#smiley').removeClass().addClass('dead');
   reveal();
   stopClock(false);
 }
@@ -281,10 +282,17 @@ function explode() {
 function reveal() {
   for (let r = 0; r < gameMap.length; r++) {
     for (let c = 0; c < gameMap[r].length; c++) {
+      let id = '#r'+r+'c'+c;
       if (gameMap[r][c] !== '0' && gameMap[r][c] !== '*') {
-        $('#r'+r+'c'+c).addClass('num'+gameMap[r][c]);
+        if ($(id).hasClass('flagged')) {
+          $(id).addClass('wrong');
+        } else {
+          $(id).addClass('num'+gameMap[r][c]);
+        }
       } else if (gameMap[r][c] == '*') {
-        $('#r'+r+'c'+c).addClass('mine');
+        if (!$(id).hasClass('flagged')) {
+          $(id).addClass('mine');
+        }
       }
     }
   }
@@ -315,6 +323,18 @@ function stopClock(reset) {
 
 function selectLevel(level) {
   selectedLevel = level.toUpperCase();
+  closeMenus();
   stopClock();
   buildGame(selectedLevel);
+}
+
+function closeMenus() {
+  $('.game-menu-item').removeClass('active');
+  $('.game-menu-context').removeClass('show');
+}
+
+function toggleMenu(menu) {
+  closeMenus();
+  $('#'+menu).toggleClass('show');
+  $('#'+menu+'-button').toggleClass('active');
 }
