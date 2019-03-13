@@ -6,7 +6,8 @@ const levels = { "BEG": beginnerGrid, "INT": intermediateGrid, "EXP": expertGrid
 
 let selectedLevel = 'INT';
 let mineCount = levels[selectedLevel].mineCount;
-let time = 000;
+let time = '000';
+let default_time = '000';
 let timeInterval;
 let start = false;
 let sweptCellCount = 0;
@@ -30,12 +31,21 @@ $(document).ready( function() {
     }
   })
 
-  $(document).on('click', '#smiley', function() {
-    stopClock(true);
-    buildGame(selectedLevel);
-    $('#smiley').removeClass().addClass('smile');
-  })
+  let gameMenu = document.getElementById('game-menu-game-button');
+  let gameMenuPositionInfo = gameMenu.getBoundingClientRect();
+  let gameMenuWidth = gameMenuPositionInfo.width;
+  $('#game-menu-help').css("left",gameMenuWidth);
+
 });
+
+// FIXME: need to add close menu if you click anywhere other than the menus
+
+function restartGame() {
+  stopClock(true);
+  buildGame(selectedLevel);
+  $('#smiley').removeClass().addClass('smile');
+  closeMenus();
+}
 
 function buildGame() {
 
@@ -78,7 +88,6 @@ function buildGame() {
   buildGrid(currentLevel, gameGrid);
   console.log(gameGrid);
   gameMap = gameGrid;
-
 }
 
 function buildGrid(level, grid) {
@@ -106,8 +115,9 @@ function scramble(a) {
 }
 
 function clickCell(row, col, skipClick = false) {
-  if (start == false) {
-    if (gameMap[row][col] == '*') {
+  if (start === false) {
+    console.log('start is false click',time);
+    if (gameMap[row][col] === '*') {
       buildGame(selectedLevel);
       clickCell(row, col);
     } else {
@@ -158,7 +168,6 @@ function clickCell(row, col, skipClick = false) {
 }
 
 function revealCell(row, col, counter = true) {
-  console.log('reveal cell');
   let cell = $('#r'+row+'c'+col);
   $('#r'+row+'c'+col).addClass('num'+gameMap[row][col]);
   if (!cell.hasClass('clicked')) {
@@ -185,12 +194,24 @@ function adjacentFlagCheck(row, col) {
 function checkGame() {
   if (sweptCellCount == levels[selectedLevel].safeCount) {
     console.log('complete!');
+    finishGame();
     stopClock(false);
     // FIXME: clock doesn't always stop
     $('#smiley').removeClass().addClass('win');
-    // TODO: set remaining flags, reset mine count
-  } else {
-    console.log('still working...');
+    
+  }
+}
+
+function finishGame() {
+  for (r = 0; r < gameMap.length; r++) {
+    for (c = 0; c < gameMap[r].length; c++) {
+      let id = '#r'+r+'c'+c;
+      if (!$(id).hasClass('clicked')) {
+        if (gameMap[r][c] === '*') {
+          $(id).addClass('flagged');
+        }
+      }
+    }
   }
 }
 
@@ -271,8 +292,6 @@ function getSurroundingCells(row, col, obj = false) {
 }
 
 function explode() {
-  // TODO: add check for flagged cells that are not mines
-  // if flagged and not mine, clicked but with x
   $('.grid-cell').addClass('clicked');
   $('#smiley').removeClass().addClass('dead');
   reveal();
@@ -314,9 +333,9 @@ function startClock() {
 function stopClock(reset) {
   console.log('stop clock');
   clearInterval(timeInterval);
-  start = false;
-  if (reset == true) {
-    time = 000;
+  // start = false;
+  if (reset === true) {
+    time = default_time;
     $('#timer').html(time);
   }
 }
@@ -329,12 +348,12 @@ function selectLevel(level) {
 }
 
 function closeMenus() {
+  console.log('closing');
   $('.game-menu-item').removeClass('active');
   $('.game-menu-context').removeClass('show');
 }
 
 function toggleMenu(menu) {
-  closeMenus();
   $('#'+menu).toggleClass('show');
   $('#'+menu+'-button').toggleClass('active');
 }
