@@ -5,12 +5,14 @@ const expertGrid = { height: 16, width: 30, mineCount: 99, safeCount: 381 };
 const levels = { "BEG": beginnerGrid, "INT": intermediateGrid, "EXP": expertGrid };
 
 let selectedLevel = 'INT';
-let mineCount = levels[selectedLevel].mineCount;
 let time = '000';
 let default_time = '000';
 let timeInterval;
 let start = false;
 let sweptCellCount = 0;
+let actualMineCount = levels[selectedLevel].mineCount;
+let mineCount = levels[selectedLevel].mineCount;
+let flaggedCellCount = 0;
 
 let gameMap;
 
@@ -24,7 +26,7 @@ $(document).ready( function() {
       cell.addClass('flagged');
       mineCount--;
       $('#mine-count').html(mineCount);
-    } else {
+    } else if (cell.hasClass('flagged') && !cell.hasClass('clicked')) {
       cell.removeClass('flagged');
       mineCount++;
       $('#mine-count').html(mineCount);
@@ -206,10 +208,10 @@ function finishGame() {
   for (r = 0; r < gameMap.length; r++) {
     for (c = 0; c < gameMap[r].length; c++) {
       let id = '#r'+r+'c'+c;
-      if (!$(id).hasClass('clicked')) {
-        if (gameMap[r][c] === '*') {
-          $(id).addClass('flagged');
-        }
+      if (!$(id).hasClass('clicked') && !$(id).hasClass('flagged') && gameMap[r][c] === '*') {
+        mineCount--;
+        $('#mine-count').html(mineCount);
+        $(id).addClass('flagged');
       }
     }
   }
@@ -304,7 +306,7 @@ function reveal() {
       let id = '#r'+r+'c'+c;
       if (gameMap[r][c] !== '0' && gameMap[r][c] !== '*') {
         if ($(id).hasClass('flagged')) {
-          $(id).addClass('wrong');
+          $(id).removeClass('num'+gameMap[r][c]).addClass('wrong');
         } else {
           $(id).addClass('num'+gameMap[r][c]);
         }
