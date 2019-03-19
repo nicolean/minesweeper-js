@@ -9,6 +9,7 @@ let time = '000';
 let default_time = '000';
 let timeInterval;
 let start = false;
+let clockStart = false;
 let sweptCellCount = 0;
 let actualMineCount = levels[selectedLevel].mineCount;
 let mineCount = levels[selectedLevel].mineCount;
@@ -198,8 +199,8 @@ function checkGame() {
     console.log('complete!');
     finishGame();
     stopClock(false);
-    // FIXME: clock doesn't always stop
     $('#smiley').removeClass().addClass('win');
+    start = false;
     
   }
 }
@@ -320,11 +321,13 @@ function reveal() {
 }
 
 function startClock() {
+  console.log('start clock');
   if (timeInterval) {
     clearInterval(timeInterval);
   }
+  clockStart = true;
   timeInterval = setInterval(function() {
-    if (time <= 999 && start == true) {
+    if (time <= 999 && start === true && clockStart === true) {
       time++;
       formattedTime = time.toString().padStart(3, '0');
       $('#timer').html(formattedTime);
@@ -335,7 +338,7 @@ function startClock() {
 function stopClock(reset) {
   console.log('stop clock');
   clearInterval(timeInterval);
-  // start = false;
+  clockStart = false;
   if (reset === true) {
     time = default_time;
     $('#timer').html(time);
