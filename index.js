@@ -34,10 +34,11 @@ $(document).ready( function() {
     }
   })
 
+  // set position of game menus 
   let gameMenu = document.getElementById('game-menu-game-button');
   let gameMenuPositionInfo = gameMenu.getBoundingClientRect();
-  let gameMenuWidth = gameMenuPositionInfo.width;
-  $('#game-menu-help').css("left",gameMenuWidth);
+  $('#game-menu-game').css("left",gameMenuPositionInfo.x);
+  $('#game-menu-help').css("left",gameMenuPositionInfo.x+gameMenuPositionInfo.width);
 
 });
 
@@ -131,7 +132,6 @@ function clickCell(row, col, skipClick = false) {
   }
   let cell = $('#r'+row+'c'+col);
   if (!cell.hasClass('flagged') && !cell.hasClass('clicked')) {
-    // revealCell(row, col, false);
     if (gameMap[row][col] === '*') {
       revealCell(row, col, false);
       cell.addClass('exploded');
@@ -149,7 +149,9 @@ function clickCell(row, col, skipClick = false) {
           }
           if (gameMap[scRow][scCol] !== '*') {
             // $(scId).addClass('clicked');
-            revealCell(scRow, scCol, true);
+            if (!$(scId).hasClass('flagged')) {
+              revealCell(scRow, scCol, true);
+            }
           }
         }
       })

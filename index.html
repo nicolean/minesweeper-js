@@ -12,31 +12,41 @@
 <div id="container">
   <div id="grid">
     <div id="game-container">
-      <div id="game-menu">
-        <div class="game-menu-item" id="game-menu-game-button" onclick="toggleMenu('game-menu-game')">Game</div>
-        <div class="game-menu-item" id="game-menu-help-button" onclick="toggleMenu('game-menu-help')">Help</div>
+      <div id="game-title-bar">
+        <div id="game-title">Minesweeper</div>
+        <div class="game-title-bar-button" id="minimize"></div>
+        <div class="game-title-bar-button" id="maximize"></div>
+        <div class="game-title-bar-button" id="exit"></div>
       </div>
-      <div class="game-menu-context" id="game-menu-game">
-        <div class="game-menu-context-item" onclick="restartGame()">New</div>
-        <div class="game-menu-context-item" id="beg-button" onclick="selectLevel('beg')">Beginner</div>
-        <div class="game-menu-context-item" id="int-button" onclick="selectLevel('int')">Intermediate</div>
-        <div class="game-menu-context-item" id="exp-button" onclick="selectLevel('exp')">Expert</div>
-      </div>
-      <div class="game-menu-context" id="game-menu-help">
-        <div class="game-menu-context-item">Help Item 1</div>
-      </div>
-      <div id="game-header">
-        <div class="header-item" id="mine-count-container">
-          <div id="mine-count"></div>
+      <div id="game-menu-container">
+        <div id="game-menu">
+          <div class="game-menu-item" id="game-menu-game-button" onclick="toggleMenu('game-menu-game')">Game</div>
+          <div class="game-menu-item" id="game-menu-help-button" onclick="toggleMenu('game-menu-help')">Help</div>
         </div>
-        <div class="header-item" id="smiley-container">
-          <div id="smiley" class="smile" onclick="restartGame()"></div>
+        <div class="game-menu-context" id="game-menu-game">
+          <div class="game-menu-context-item" onclick="restartGame()">New</div>
+          <div class="game-menu-context-item" id="beg-button" onclick="selectLevel('beg')">Beginner</div>
+          <div class="game-menu-context-item" id="int-button" onclick="selectLevel('int')">Intermediate</div>
+          <div class="game-menu-context-item" id="exp-button" onclick="selectLevel('exp')">Expert</div>
         </div>
-        <div class="header-item" id="timer-container">
-          <div id="timer">000</div>
+        <div class="game-menu-context" id="game-menu-help">
+          <div class="game-menu-context-item">Help Item 1</div>
         </div>
       </div>
-      <div id="grid-container">
+      <div id="game-grid-container">
+        <div id="game-header">
+          <div class="header-item" id="mine-count-container">
+            <div id="mine-count"></div>
+          </div>
+          <div class="header-item" id="smiley-container">
+            <div id="smiley" class="smile" onclick="restartGame()"></div>
+          </div>
+          <div class="header-item" id="timer-container">
+            <div id="timer">000</div>
+          </div>
+        </div>
+        <div id="grid-container">
+        </div>
       </div>
   </div>
 </div>
