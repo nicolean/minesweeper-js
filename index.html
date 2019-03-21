@@ -9,10 +9,10 @@
   <link href="https://fonts.googleapis.com/css?family=ZCOOL+QingKe+HuangYou" rel="stylesheet">
 </head>
 
-<div id="container">
+<div id="minesweeper-container">
   <div id="grid">
     <div id="game-container">
-      <div id="game-title-bar">
+      <div id="game-title-bar" class="game-title-bar">
         <div id="game-title">Minesweeper</div>
         <div class="game-title-bar-button" id="minimize"></div>
         <div class="game-title-bar-button" id="maximize"></div>
@@ -30,7 +30,8 @@
           <div class="game-menu-context-item" id="exp-button" onclick="selectLevel('exp')">Expert</div>
         </div>
         <div class="game-menu-context" id="game-menu-help">
-          <div class="game-menu-context-item">Help Item 1</div>
+          <div class="game-menu-context-item">Right-click to add a flag</div>
+          <div class="game-menu-context-item">Click on a number to simulate clicking both mouse buttons</div>
         </div>
       </div>
       <div id="game-grid-container">
@@ -48,5 +49,15 @@
         <div id="grid-container">
         </div>
       </div>
+    </div>
   </div>
+  <!-- <div id="game-help">
+    <div class="game-title-bar">
+      <div class="game-title">Help</div>
+    </div>
+    <div id="help-container">
+      <div>Right-click to add a flag</div>
+      <div>Click on a number to simulate clicking both mouse buttons</div>
+    </div>
+  </div> -->
 </div>

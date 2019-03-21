@@ -352,6 +352,11 @@ function selectLevel(level) {
   closeMenus();
   stopClock();
   buildGame(selectedLevel);
+  // reset game menu position since size changed
+  let gameMenu = document.getElementById('game-menu-game-button');
+  let gameMenuPositionInfo = gameMenu.getBoundingClientRect();
+  $('#game-menu-game').css("left",gameMenuPositionInfo.x);
+  $('#game-menu-help').css("left",gameMenuPositionInfo.x+gameMenuPositionInfo.width);
 }
 
 function closeMenus() {
