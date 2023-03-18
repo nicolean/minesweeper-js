@@ -5,11 +5,15 @@ const expertGrid = { height: 16, width: 30, mineCount: 99, safeCount: 381 };
 const levels = { "BEG": beginnerGrid, "INT": intermediateGrid, "EXP": expertGrid };
 
 let selectedLevel = 'INT';
-let mineCount = levels[selectedLevel].mineCount;
-let time = 0;
+let time = '000';
+let default_time = '000';
 let timeInterval;
 let start = false;
+let clockStart = false;
 let sweptCellCount = 0;
+let actualMineCount = levels[selectedLevel].mineCount;
+let mineCount = levels[selectedLevel].mineCount;
+let flaggedCellCount = 0;
 
 let gameMap;
 
@@ -23,20 +27,29 @@ $(document).ready( function() {
       cell.addClass('flagged');
       mineCount--;
       $('#mine-count').html(mineCount);
-    } else {
+    } else if (cell.hasClass('flagged') && !cell.hasClass('clicked')) {
       cell.removeClass('flagged');
       mineCount++;
       $('#mine-count').html(mineCount);
     }
   })
 
-  $(document).on('click', '#smiley', function() {
-    console.log('clicked smiley');
-    stopClock(true);
-    buildGame(selectedLevel);
-    $('#smiley').html(':|');
-  })
+  // set position of game menus 
+  let gameMenu = document.getElementById('game-menu-game-button');
+  let gameMenuPositionInfo = gameMenu.getBoundingClientRect();
+  $('#game-menu-game').css("left",gameMenuPositionInfo.x);
+  $('#game-menu-help').css("left",gameMenuPositionInfo.x+gameMenuPositionInfo.width);
+
 });
+
+// FIXME: need to add close menu if you click anywhere other than the menus
+
+function restartGame() {
+  stopClock(true);
+  buildGame(selectedLevel);
+  $('#smiley').removeClass().addClass('smile');
+  closeMenus();
+}
 
 function buildGame() {
 
@@ -77,17 +90,12 @@ function buildGame() {
     }
   }
   buildGrid(currentLevel, gameGrid);
+  console.log(gameGrid);
   gameMap = gameGrid;
-
 }
 
 function buildGrid(level, grid) {
-  let gridHtml = '<div id="game-container" class="'+selectedLevel+'">'
-    +'<div id="game-header">'
-    +'<div class="'+selectedLevel+'" id="mine-count">'+level.mineCount+'</div>'
-    +'<div id="smiley">:|</div>'
-    +'<div class="'+selectedLevel+'" id="timer">'+time+'</div>'
-    +'</div>';
+  let gridHtml = '';
   for (let r = 0; r < grid.length; r++) {
     gridHtml += '<div class="grid-row">';
     for (let c = 0; c < grid[r].length; c++) {
@@ -95,9 +103,8 @@ function buildGrid(level, grid) {
     }
     gridHtml += '</div>';
   }
-  gridHtml += '</div>';
   $('#mine-count').html(level.mineCount);
-  $('#grid').html(gridHtml);
+  $('#grid-container').html(gridHtml);
 }
 
 function scramble(a) {
@@ -112,18 +119,19 @@ function scramble(a) {
 }
 
 function clickCell(row, col, skipClick = false) {
-  if (start == false) {
-    if (gameMap[row][col] == '*') {
+  if (start === false) {
+    console.log('start is false click',time);
+    if (gameMap[row][col] === '*') {
       buildGame(selectedLevel);
       clickCell(row, col);
     } else {
+      // TODO: if their first click is a flag
       start = true;
       startClock();
     }
   }
   let cell = $('#r'+row+'c'+col);
   if (!cell.hasClass('flagged') && !cell.hasClass('clicked')) {
-    // revealCell(row, col, false);
     if (gameMap[row][col] === '*') {
       revealCell(row, col, false);
       cell.addClass('exploded');
@@ -141,7 +149,9 @@ function clickCell(row, col, skipClick = false) {
           }
           if (gameMap[scRow][scCol] !== '*') {
             // $(scId).addClass('clicked');
-            revealCell(scRow, scCol, true);
+            if (!$(scId).hasClass('flagged')) {
+              revealCell(scRow, scCol, true);
+            }
           }
         }
       })
@@ -163,7 +173,6 @@ function clickCell(row, col, skipClick = false) {
 }
 
 function revealCell(row, col, counter = true) {
-  console.log('reveal cell');
   let cell = $('#r'+row+'c'+col);
   $('#r'+row+'c'+col).addClass('num'+gameMap[row][col]);
   if (!cell.hasClass('clicked')) {
@@ -173,7 +182,6 @@ function revealCell(row, col, counter = true) {
     }
   }
   checkGame();
-  console.log(sweptCellCount);
 }
 
 function adjacentFlagCheck(row, col) {
@@ -191,8 +199,24 @@ function adjacentFlagCheck(row, col) {
 function checkGame() {
   if (sweptCellCount == levels[selectedLevel].safeCount) {
     console.log('complete!');
-  } else {
-    console.log('still working...');
+    finishGame();
+    stopClock(false);
+    $('#smiley').removeClass().addClass('win');
+    start = false;
+    
+  }
+}
+
+function finishGame() {
+  for (r = 0; r < gameMap.length; r++) {
+    for (c = 0; c < gameMap[r].length; c++) {
+      let id = '#r'+r+'c'+c;
+      if (!$(id).hasClass('clicked') && !$(id).hasClass('flagged') && gameMap[r][c] === '*') {
+        mineCount--;
+        $('#mine-count').html(mineCount);
+        $(id).addClass('flagged');
+      }
+    }
   }
 }
 
@@ -274,7 +298,7 @@ function getSurroundingCells(row, col, obj = false) {
 
 function explode() {
   $('.grid-cell').addClass('clicked');
-  $('#smiley').html(':(');
+  $('#smiley').removeClass().addClass('dead');
   reveal();
   stopClock(false);
 }
@@ -282,38 +306,66 @@ function explode() {
 function reveal() {
   for (let r = 0; r < gameMap.length; r++) {
     for (let c = 0; c < gameMap[r].length; c++) {
+      let id = '#r'+r+'c'+c;
       if (gameMap[r][c] !== '0' && gameMap[r][c] !== '*') {
-        $('#r'+r+'c'+c).addClass('num'+gameMap[r][c]);
+        if ($(id).hasClass('flagged')) {
+          $(id).removeClass('num'+gameMap[r][c]).addClass('wrong');
+        } else {
+          $(id).addClass('num'+gameMap[r][c]);
+        }
       } else if (gameMap[r][c] == '*') {
-        $('#r'+r+'c'+c).addClass('mine');
+        if (!$(id).hasClass('flagged')) {
+          $(id).addClass('mine');
+        }
       }
     }
   }
 }
 
 function startClock() {
+  console.log('start clock');
   if (timeInterval) {
     clearInterval(timeInterval);
   }
+  clockStart = true;
   timeInterval = setInterval(function() {
-    if (time <= 999 && start == true) {
+    if (time <= 999 && start === true && clockStart === true) {
       time++;
-      $('#timer').html(time);
+      formattedTime = time.toString().padStart(3, '0');
+      $('#timer').html(formattedTime);
     }
   }, 1000);
 }
 
 function stopClock(reset) {
+  console.log('stop clock');
   clearInterval(timeInterval);
-  start = false;
-  if (reset == true) {
-    time = 0;
+  clockStart = false;
+  if (reset === true) {
+    time = default_time;
     $('#timer').html(time);
   }
 }
 
 function selectLevel(level) {
   selectedLevel = level.toUpperCase();
+  closeMenus();
   stopClock();
   buildGame(selectedLevel);
+  // reset game menu position since size changed
+  let gameMenu = document.getElementById('game-menu-game-button');
+  let gameMenuPositionInfo = gameMenu.getBoundingClientRect();
+  $('#game-menu-game').css("left",gameMenuPositionInfo.x);
+  $('#game-menu-help').css("left",gameMenuPositionInfo.x+gameMenuPositionInfo.width);
+}
+
+function closeMenus() {
+  console.log('closing');
+  $('.game-menu-item').removeClass('active');
+  $('.game-menu-context').removeClass('show');
+}
+
+function toggleMenu(menu) {
+  $('#'+menu).toggleClass('show');
+  $('#'+menu+'-button').toggleClass('active');
 }
